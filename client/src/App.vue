@@ -116,9 +116,9 @@ export default {
 
       mobile: [
         { title: "홈", path: "/", icon: "mdi-home-outline" },
-        { title: "일정", path: "/schedule", icon: "mdi-school-outline" },
-        { title: "보고서", path: "/report", icon: "mdi-bullhorn-outline" },
-        { title: "설정", path: "/community", icon: "mdi-cog-outline" },
+        { title: "거래 내역", path: "/record", icon: "mdi-school-outline" },
+        { title: "수익 내역", path: "/daily-score", icon: "mdi-bullhorn-outline" },
+        { title: "내 설정", path: "/setting", icon: "mdi-cog-outline" },
 
       ],
       display,
