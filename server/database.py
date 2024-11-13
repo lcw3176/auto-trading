@@ -5,33 +5,32 @@ from typing import Any, Tuple
 
 
 class DataBase:
-    conn = sqlite3.connect('main.db')
-    cursor = conn.cursor()
+    def __init__(self, db_name: str = 'main.db'):
+        self.conn = sqlite3.connect(db_name, check_same_thread=False)
+        self.cursor = self.conn.cursor()
 
-    @classmethod
-    def run_query(cls, query: str, params: Tuple[Any, ...] = ()):
+    def run_query(self, query: str, params: Tuple[Any, ...] = ()):
         try:
-            cls.cursor.execute(query, params)
-            cls.conn.commit()
+            self.cursor.execute(query, params)
+            self.conn.commit()
+        except sqlite3.Error as error:
+            print(f"Error: {error}")
+
+    def run_query_with_result(self, query: str, params: Tuple[Any, ...] = (), size=10):
+        try:
+            return self.cursor.execute(query, params)
 
         except sqlite3.Error as error:
-            print(error)
+            print(f"Error: {error}")
+            return None
 
-    @classmethod
-    def run_query_with_result(cls, query: str, params: Tuple[Any, ...] = ()):
-        try:
-            cls.cursor.execute(query, params)
-            yield from cls.cursor.fetchall()
-        except sqlite3.Error as error:
-            print(error)
-
-    @classmethod
-    def close_db(cls):
-        if cls.conn:
-            cls.conn.close()
+    def close_db(self):
+        if self.conn:
+            self.conn.close()
 
 
-atexit.register(DataBase.close_db)
+db = DataBase()
+atexit.register(db.close_db)
 
 
 def init_db():

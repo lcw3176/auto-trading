@@ -1,5 +1,7 @@
+from __future__ import annotations
 from pydantic import BaseModel
 from datetime import datetime
+from database import db
 
 
 class Users(BaseModel):
@@ -13,6 +15,15 @@ class Users(BaseModel):
     order_cancel_minute: int
     access_key: str
     secret_key: str
+
+    @classmethod
+    def find_by_id_and_pw(cls, user_id: str, user_pw: str) -> Users:
+        cursor = db.run_query_with_result(query="SELECT * FROM users WHERE user_id = ? AND user_pw = ?",
+                                                params=(user_id, user_pw))
+
+        result = cursor.fetchone()
+
+        return result
 
 
 class TradeRecord(BaseModel):
