@@ -10,7 +10,7 @@
   "dependencies": {
     "@mdi/font": "^7.2.96",
     "@vue/cli-plugin-pwa": "^5.0.8",
-    "axios": "^1.4.0",
+    "axios": "^1.6.0",
     "core-js": "^3.8.3",
     "dayjs": "^1.11.7",
     "pinia": "^2.0.28",
@@ -19,7 +19,7 @@
     "vue-router": "^4.0.3",
     "vuetify": "^3.2.1"
   },
-  
+
   "browserslist": [
     "> 1%",
     "last 2 versions",
