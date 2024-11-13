@@ -101,7 +101,6 @@ export default {
     return {
       appTitle: "Auto",
       desktopWithAuth: [
-        { title: "수익 내역", path: "/daily-score" },
         { title: "거래 내역", path: "/record" },
         { title: "현재 거래 목록", path: "/in-progress" },
         { title: "내 설정", path: "/setting" },
@@ -117,7 +116,7 @@ export default {
       mobile: [
         { title: "홈", path: "/", icon: "mdi-home-outline" },
         { title: "거래 내역", path: "/record", icon: "mdi-school-outline" },
-        { title: "수익 내역", path: "/daily-score", icon: "mdi-bullhorn-outline" },
+        { title: "현재 거래 목록", path: "/in-progress", icon: "mdi-bullhorn-outline" },
         { title: "내 설정", path: "/setting", icon: "mdi-cog-outline" },
 
       ],
