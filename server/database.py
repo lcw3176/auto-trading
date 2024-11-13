@@ -50,7 +50,7 @@ def init_db():
     );'''
 
     trade_record = '''
-        CREATE TABLE IF NOT EXISTS trade_records (
+        CREATE TABLE IF NOT EXISTS trade_record (
         id INTEGER PRIMARY KEY,
         user_id INTEGER NOT NULL,
         name TEXT NOT NULL,
@@ -75,7 +75,7 @@ def init_db():
     );'''
 
     candle = '''
-        CREATE TABLE IF NOT EXISTS  Candle (
+        CREATE TABLE IF NOT EXISTS candle (
         id INTEGER PRIMARY KEY,
         company TEXT NOT NULL,
         minute TEXT NOT NULL,
