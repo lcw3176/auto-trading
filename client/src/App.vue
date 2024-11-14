@@ -123,7 +123,7 @@ export default {
     const authStore = useAuthStore();
 
     return {
-      appTitle: "Auto",
+      appTitle: "부자새우",
       desktopWithAuth: [
         { title: "백테스트", path: "/backtest" },
       ],
