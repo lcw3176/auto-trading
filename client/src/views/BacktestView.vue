@@ -16,8 +16,8 @@
 
                     <v-col cols="8">
                         <v-form>
-                            <v-select v-model="formData.tradeTarget" :items="coinList" label="거래할 종목을 선택해주세요"
-                                variant="solo" required />
+                            <v-autocomplete v-model="formData.ticker" :items="backtestStore.coins" label="거래할 종목을 선택해주세요"
+                                variant="solo" required clearable />
 
                             <v-text-field v-model="formData.startBalance" label="시작 원화 잔고" type="number" variant="solo"
                                 required />
@@ -25,14 +25,13 @@
                             <v-text-field v-model="formData.maxAdditionalBuyCount" label="최대 추가 매수 횟수를 입력해주세요"
                                 type="number" placeholder="단일 매수시 0 입력" variant="solo" required />
 
-                            <v-select v-model="formData.strategyType" :items="strategyList" variant="solo"
-                                item-value="strategy" label="사용 전략" required />
+                            <v-select v-model="formData.strategyType" :items="backtestStore.strategies" variant="solo"
+                                item-value="strategy" label="사용 전략" required clearable />
 
-                            <v-select v-model="formData.candleMinute" :items="candleMinuteList" variant="solo"
-                                item-value="candle" label="기준 분봉" required />
+                            <v-select v-model="formData.candleMinute" :items="backtestStore.candleMinutes" variant="solo" label="기준 분봉" required clearable />
 
                             <v-text-field v-model="formData.startDate" label="시작 날짜" type="datetime-local"
-                                variant="solo" required />
+                                variant="solo" required  />
                             <v-text-field v-model="formData.endDate" label="종료 날짜" type="datetime-local" variant="solo"
                                 required />
                             <v-text-field v-model="backtestResult" label="예상 이득" readonly />
@@ -55,8 +54,14 @@
 
             <!-- 차트 -->
             <v-row>
-                <v-col cols="12">
-                    <div id="chart" style="height: 700px;"></div>
+                <v-col cols="2">
+
+                </v-col>
+                <v-col cols="8">
+                    <div id="chart" style="height: 700px; width: 100%;"></div>
+                </v-col>
+                <v-col cols="2">
+                    
                 </v-col>
             </v-row>
         </v-container>
@@ -65,6 +70,7 @@
 
 <script>
 import { ref } from 'vue';
+import { useBacktestStore } from '@/store/backtest.js'
 
 const socket = new WebSocket('ws://localhost:8000/backtest');
 
@@ -72,10 +78,12 @@ const socket = new WebSocket('ws://localhost:8000/backtest');
 export default {
     name: 'BacktestForm',
     setup() {
+        const backtestStore = useBacktestStore();
+        backtestStore.requestInitData();
 
         const isLoading = ref(false);
         const formData = ref({
-            tradeTarget: '',
+            ticker: '',
             startBalance: '',
             maxAdditionalBuyCount: 0,
             strategyType: '',
@@ -85,38 +93,32 @@ export default {
         });
         const backtestResult = ref('');
 
-        const coinList = ['비트코인', '이더리움']
-        const strategyList = ['A', 'B']
-        const candleMinuteList = ['1분', '5분', '15분']
-
 
         let isRun;
         let markers = [];
         let chart = '';
         let candleSeries = '';
 
-        
+
         const startBacktest = () => {
             if (!isLoading.value) {
                 isLoading.value = true;
                 socket.send(JSON.stringify(formData.value));
             }
         };
-        
+
 
         return {
             formData,
             backtestResult,
             isLoading,
-            coinList,
-            strategyList,
-            candleMinuteList,
             startBacktest,
             isRun,
             markers,
             chart,
             candleSeries,
-            socket
+            socket,
+            backtestStore
         };
     },
 
@@ -156,7 +158,7 @@ export default {
                 high: value.high,
                 low: value.low,
                 close: value.close,
-                time: Date.parse(value.time) / 1000 + 32400,
+                time: value.time
             };
 
 
