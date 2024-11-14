@@ -17,12 +17,36 @@
 
         <v-col>
           <div v-if="authStore.token" class="text-right">
-            <v-btn v-for="item in desktopWithAuth" :key="item.title" :to="item.path">
-              {{ item.title }}
+
+            <v-btn v-for="(item, index) in desktopWithAuth" :key="index" :to="item.path">
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
             </v-btn>
+
+
+            <v-menu open-on-hover>
+              <template v-slot:activator="{ props }">
+                <v-btn v-bind="props">
+                  내 정보
+                </v-btn>
+              </template>
+
+              <v-list>
+                <v-list-item v-for="(item, index) in myInfo" :key="index">
+
+                  <v-btn :to="item.path">
+                    <v-list-item-title>{{ item.title }}</v-list-item-title>
+                  </v-btn>
+
+                </v-list-item>
+              </v-list>
+            </v-menu>
+
+
+
+
           </div>
 
-          <div v-else>
+          <div v-else class="text-right">
             <v-btn v-for="item in desktopWithoutAuth" :key="item.title" :to="item.path">
               {{ item.title }}
             </v-btn>
@@ -101,10 +125,13 @@ export default {
     return {
       appTitle: "Auto",
       desktopWithAuth: [
+        { title: "백테스트", path: "/backtest" },
+      ],
+
+      myInfo: [
         { title: "거래 내역", path: "/record" },
         { title: "현재 거래 목록", path: "/in-progress" },
-        { title: "내 설정", path: "/setting" },
-        { title: "백테스트", path: "/backtest" },
+        { title: "설정", path: "/setting" },
         { title: "로그아웃", path: "/logout" }
       ],
 
