@@ -7,6 +7,7 @@ from typing import Any, Tuple
 class DataBase:
     def __init__(self, db_name: str = 'main.db'):
         self.conn = sqlite3.connect(db_name, check_same_thread=False)
+        self.conn.row_factory = sqlite3.Row
         self.cursor = self.conn.cursor()
 
     def run_query(self, query: str, params: Tuple[Any, ...] = ()):
@@ -16,7 +17,7 @@ class DataBase:
         except sqlite3.Error as error:
             print(f"Error: {error}")
 
-    def run_query_with_result(self, query: str, params: Tuple[Any, ...] = (), size=10):
+    def run_query_with_cursor(self, query: str, params: Tuple[Any, ...] = ()):
         try:
             return self.cursor.execute(query, params)
 
@@ -30,6 +31,16 @@ class DataBase:
 
 
 db = DataBase()
+
+
+def mapped_key_value(rows):
+    dic = {}
+    for i in range(0, len(rows)):
+        dic[rows.keys()[i]] = rows[i]
+
+    return dic
+
+
 atexit.register(db.close_db)
 
 
@@ -87,10 +98,10 @@ def init_db():
         volume REAL NOT NULL
     );'''
 
-    DataBase.run_query(query=user)
-    DataBase.run_query(query=trade_record)
-    DataBase.run_query(query=trade_in_progress)
-    DataBase.run_query(query=candle)
+    db.run_query(query=user)
+    db.run_query(query=trade_record)
+    db.run_query(query=trade_in_progress)
+    db.run_query(query=candle)
 
 
 if __name__ == '__main__':
