@@ -21,9 +21,21 @@ const routes = [
 
 
   {
+    path: '/setting',
+    name: 'setting',
+    component: () => import(/* webpackChunkName: "setting" */ '../views/UserSettingView.vue')
+  },
+
+  {
     path: '/logout',
     name: 'logout',
     component: () => import(/* webpackChunkName: "logout" */ '../views/LogoutView.vue')
+  },
+
+  {
+    path: '/backtest',
+    name: 'backtest',
+    component: () => import(/* webpackChunkName: "backtest" */ '../views/BacktestView.vue')
   },
   
   {
