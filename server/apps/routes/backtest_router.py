@@ -1,6 +1,7 @@
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 import logging
 from datetime import datetime
+from apps.services import coin_service
 
 router = APIRouter()
 
@@ -13,15 +14,21 @@ async def websocket_endpoint(websocket: WebSocket):
         while True:
             data = await websocket.receive_json()
 
+            result = coin_service.get_candle_data(ticker_kor=data['ticker'],
+                                         interval_kor=data['candleMinute'],
+                                         start_date=data['startDate'],
+                                         end_date=data['endDate'])
 
-            await websocket.send_json({
-                "open": 100,
-                "high": 120,
-                "low": 80,
-                "close": 90,
-                "time": datetime.now().timestamp() / 1000 + 32400,
-            })
+            for i in result:
+                await websocket.send_json(i)
 
     except WebSocketDisconnect:
-        logging.info("WebSocket connection closed")
         await websocket.close()
+
+
+
+@router.get("/backtest")
+def get_backtest_info():
+    # fixme 코인에 한정되지 않게 수정
+
+    return coin_service.get_backtest_info()
