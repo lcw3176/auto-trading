@@ -25,13 +25,6 @@ def try_login(login: Login):
 
 
 
-
-
-@router.get("/logout")
-def try_logout():
-    return {"message": "Logout"}
-
-
 @router.get("/settings")
 def get_user_settings():
     return {"message": "setting"}
